@@ -24,6 +24,10 @@ struct cs_global G;
 /* iterations for waiting for bits */
 static int wait_iterations = 32;
 
+// Fury printf
+extern void PrintStr(const char *, ...);
+extern void PrintStrV(const char *, va_list);
+
 #ifdef DIAG
 
 #define diagfd (G.diag_fd ? G.diag_fd : stderr)
@@ -40,6 +44,9 @@ void cs_diagf(char const *s, ...)
 {
     va_list args;
     va_start(args, s);
+    PrintStrV(s, args);
+    va_end(args);
+    /*
     if (s[0] == '!') {
         fprintf(diagfd, "** csaccess: ");
         ++s;
@@ -47,6 +54,7 @@ void cs_diagf(char const *s, ...)
     vfprintf(diagfd, s, args);
     va_end(args);
     fflush(diagfd);
+    */
 }
 #else
 void cs_diagf(char const *, ...)
@@ -115,10 +123,11 @@ int cs_report_error(char const *fmt, ...)
 #ifdef UNIX_KERNEL
     printk("** csaccess: %s\n", err_mesg);
 #else
-    fprintf(diagfd, "** csaccess: ERROR: %s\n", err_mesg);
+    //fprintf(diagfd, "** csaccess: ERROR: %s\n", err_mesg);
+    PrintStr("** csaccess: ERROR: %s\n", err_mesg);
 #endif
 #ifndef UNIX_KERNEL
-    fflush(diagfd);
+    //fflush(diagfd);
 #endif
     return -1;
 }
@@ -135,11 +144,12 @@ int cs_report_device_error(struct cs_device *d, char const *fmt, ...)
 #ifdef UNIX_KERNEL
     printk("** csaccess(%" CS_PHYSFMT "): %s\n", d->phys_addr, err_mesg);
 #else
-    fprintf(diagfd, "** csaccess(%" CS_PHYSFMT "): ERROR: %s\n",
-            d->phys_addr, err_mesg);
+    PrintStr("** csaccess(%" CS_PHYSFMT "): ERROR: %s\n", d->phys_addr, err_mesg);
+    //fprintf(diagfd, "** csaccess(%" CS_PHYSFMT "): ERROR: %s\n",
+    //        d->phys_addr, err_mesg);
 #endif
 #ifndef UNIX_KERNEL
-    fflush(diagfd);
+    //fflush(diagfd);
 #endif
     return -1;
 }
