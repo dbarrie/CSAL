@@ -558,6 +558,14 @@ trace devices.
 /** @name CoreSight STM registers */
 /**@{*/
 #define CS_STM_STIMR(p) (0x000 + 4 * (p)) /**< STM basic stimulus port(p) [p=0-31]. */
+#define CS_STM_HEER 0xD00
+#define CS_STM_HETER 0xD20
+#define CS_STM_HEBSR 0xD60
+#define CS_STM_HEMCR 0xD64
+#define CS_STM_HEMCR_EN 0x01
+#define CS_STM_HEMCR_COMPEN 0x02
+#define CS_STM_HEMASTR 0xDF4
+#define CS_STM_HEFEAT1R 0xDF8
 #define CS_STM_SPER 0xE00
 #define CS_STM_SPTER 0xE20
 #define CS_STM_PRIVMASKR 0xE40
